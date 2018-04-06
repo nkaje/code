@@ -36,7 +36,7 @@ char *long_addition(char *num_long, char *num_short, char *sum)
 
 int main()
 {
-	char *a = "56921343";
+	char *a = "9999999";
 	char *b = "1";
 
 	/* account for overflow */
