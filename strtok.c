@@ -86,14 +86,13 @@ int main()
 {
 	char *ret = NULL;
 	char input[] = "-, This a string";
-	//char input[] = ", aaa bbb ccc, ddd";
 	char ct[] = " ,-.";
 
-	ret = strtok(input, ct); //"aaa"
+	ret = strtok(input, ct);
 
 	while (ret != NULL) {
 		printf("%s\n", ret);
-		ret = strtok(NULL, " ,"); //bbb
+		ret = strtok(NULL, " ,");
 	}
 
 	return 0;
