@@ -24,11 +24,14 @@ next call (particular library implementations are not required to avoid data rac
 
 */
 
+
 #include <stdio.h>
 #include <string.h>
 
+
 #define TRUE	1
 #define FALSE	0
+
 
 int check_in_ct(char c, const char *ct)
 {
@@ -86,14 +89,14 @@ char *strtok(char *s, const char *ct)
 int main()
 {
 	char *ret = NULL;
-	char input[] = "-, This a string";
+	char input[] = "-, This a string.";
 	char ct[] = " ,-.";
 
 	ret = strtok(input, ct);
 
 	while (ret != NULL) {
 		printf("%s\n", ret);
-		ret = strtok(NULL, " ,");
+		ret = strtok(NULL, ct);
 	}
 
 	return 0;
