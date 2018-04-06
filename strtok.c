@@ -51,6 +51,10 @@ char *strtok(char *s, const char *ct)
 	int begin = 0;
 	int end = -1;
 
+	/* bound check */
+	if(cur_idx > orig_len)
+		return NULL;
+
 	if (!s) {
 		s = s_cache;
 		begin = cur_idx;
@@ -58,9 +62,6 @@ char *strtok(char *s, const char *ct)
 		s_cache = s;
 		orig_len = (int)strlen(s);
 	}
-
-	if(cur_idx > orig_len)
-		return NULL;
 
 	if (check_in_ct(s[cur_idx], ct)) {
 		cur_idx++;
