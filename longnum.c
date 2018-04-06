@@ -14,7 +14,6 @@ char *long_addition(char *num_long, char *num_short, char *sum)
 
 	while (index_short >= 0) {
 		s = char_to_num(num_long[index_long]) + char_to_num(num_short[index_short]) + c;
-		printf("%d+%d=%d\n", char_to_num(num_long[index_long]), char_to_num(num_short[index_short]), s);
 		c = s/10;
 		*(sum + 1 + index_long) = num_to_char(s%10);
 		index_short--;
@@ -23,9 +22,7 @@ char *long_addition(char *num_long, char *num_short, char *sum)
 
 	while (index_long >= 0) {
 		s = char_to_num(num_long[index_long]) + c;
-		printf("%d\n", s);
 		c = s/10;
-		printf("%d+%d=%d\n", c, char_to_num(num_long[index_long]), s);
 		*(sum + 1 + index_long) = num_to_char(s%10);
 		index_long--;
 	}
