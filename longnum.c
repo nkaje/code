@@ -48,5 +48,6 @@ int main()
 		s = long_addition(b, a, s);
 
 	printf("%s+%s=%s\n", a,b,s);
+	free(s);
 	return 0;
 }
