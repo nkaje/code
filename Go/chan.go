@@ -2,7 +2,6 @@ package main
 import "fmt"
 import "time"
 import rt "runtime/debug"
-import "sync"
 
 type Txfn func() error
 
@@ -25,6 +24,9 @@ func run_thread(cb Txfn) error {
 
     go fill_messages(c)
 
+    fmt.Println("In run_thread, waiting 5s")
+    time.Sleep(5 * time.Second)
+
     fmt.Println("looking to read c")
     for val := range c {
         fmt.Println(val)
@@ -36,28 +38,18 @@ func run_thread(cb Txfn) error {
 }
 
 func main() {
-    var wg sync.WaitGroup
     fmt.Println("run main()")
 
-    wg.Add(1)
     txCb := func() error {
-        defer wg.Done()
         rt.PrintStack()
         fmt.Println("in callback func()")
         return nil
     }
 
-    err := run_thread(txCb)
-    if err != nil {
-        fmt.Println("Error")
-    } else {
-        fmt.Println("no Error")
-    }
+    go run_thread(txCb)
 
     fmt.Println("Continuing main()...")
 
-    fmt.Println("Waiting for 30 seconds")
-    time.Sleep(15 * time.Second)
-    // Wait till the callback finishes
-    wg.Wait()
+    fmt.Println("Waiting for 10 seconds")
+    time.Sleep(10 * time.Second)
 }
