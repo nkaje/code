@@ -1,6 +1,9 @@
 package main
 import "fmt"
 import "time"
+import rt "runtime/debug"
+
+type Txfn func() error
 
 func fill_messages(c chan string) {
     for i := 0;  i <= 3; i++ {
@@ -16,7 +19,7 @@ func fill_messages(c chan string) {
     close(c)
 }
 
-func run_thread() error {
+func run_thread(cb Txfn) error {
     c := make(chan string, 2)
 
     go fill_messages(c)
@@ -26,21 +29,30 @@ func run_thread() error {
         fmt.Println(val)
     }
     fmt.Println("all read")
+    err := cb()
 
-    return nil
+    return err
 }
 
 func main() {
 
-    fmt.Println("run run_thread")
+    fmt.Println("run main()")
 
-    err := run_thread()
+    txCb := func() error {
+        rt.PrintStack()
+        fmt.Println("in func()")
+        return nil
+    }
+
+    err := run_thread(txCb)
     if err != nil {
         fmt.Println("Error")
     } else {
         fmt.Println("no Error")
     }
 
-    fmt.Println("Waiting for 15 seconds")
+    fmt.Println("Continuing main()...")
+
+    fmt.Println("Waiting for 30 seconds")
     time.Sleep(15 * time.Second)
 }
