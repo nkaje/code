@@ -19,25 +19,26 @@ func fill_messages(c chan string) {
     close(c)
 }
 
-func run_thread(cb Txfn) error {
+func run_thread(cb Txfn, i int) error {
     c := make(chan string, 2)
 
     go fill_messages(c)
 
-    fmt.Println("In run_thread, waiting 5s")
+    fmt.Println("In run_thread, waiting 5s", i)
     time.Sleep(5 * time.Second)
 
-    fmt.Println("looking to read c")
+    fmt.Println("looking to read c", i)
     for val := range c {
         fmt.Println(val)
     }
-    fmt.Println("all read")
+    fmt.Println("all read", i)
     err := cb()
 
     return err
 }
 
 func main() {
+    var sem = make(chan int, 5)
     fmt.Println("run main()")
 
     txCb := func() error {
@@ -46,7 +47,13 @@ func main() {
         return nil
     }
 
-    go run_thread(txCb)
+    for i:= 0; i<10; i++ {
+        sem <- 1
+        go func(i int) {
+            run_thread(txCb, i)
+            <-sem
+        } (i)
+    }
 
     fmt.Println("Continuing main()...")
 
