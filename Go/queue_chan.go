@@ -22,15 +22,19 @@ func main() {
     fmt.Println("run main()")
 
     for i:= 0; i<10; i++ {
-        fmt.Printf("queue %c\n", sample[i])
-        queue.PushBack(sample[i])
         sem <- 1
+
+        mutex.Lock()
+        fmt.Printf("queue %c, length of queue %d\n", sample[i], len(sem))
+        queue.PushBack(sample[i])
+        mutex.Unlock()
+
         go func(queue *list.List) {
            mutex.Lock()
            if (queue.Len() > 0) {
                 e := queue.Front()
                 queue.Remove(e)
-                fmt.Printf("dequeue %c %c\n", e.Value, ch_v)
+                fmt.Printf("dequeue %c length of queue %d\n", e.Value, len(sem)-1)
            }
            mutex.Unlock()
            run_thread()
