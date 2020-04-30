@@ -16,7 +16,7 @@ func run_thread() error {
 func main() {
     queue := list.New()
     var mutex = &sync.Mutex{}
-    const sample ="abcdefghij"
+    const sample = "abcdefghij"
 
     var sem = make(chan int, 5)
     fmt.Println("run main()")
@@ -30,7 +30,7 @@ func main() {
            if (queue.Len() > 0) {
                 e := queue.Front()
                 queue.Remove(e)
-                fmt.Printf("dequeue %c\n", e.Value)
+                fmt.Printf("dequeue %c %c\n", e.Value, ch_v)
            }
            mutex.Unlock()
            run_thread()
