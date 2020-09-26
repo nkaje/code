@@ -24,6 +24,13 @@ def get_key(filename):
         kdata = base64.decodestring(kdata)
     return kdata
 
+def read_file(filename):
+    # base64 encoded
+    with open(filename, "rb") as f:
+        data = f.read()
+        data = data.decode("utf-8")
+    return data
+
 def dump_data(data, fname):
     with open(fname, "wb") as f:
         f.write(data)
@@ -42,6 +49,7 @@ def encrypt_decrypt(inp, encfile, decfile, key):
     print(decfile)
     print(encfile)
 
+    data = read_file(inp)
     print("Data: ", data, len(data))
     print("Key data:", kdata, len(kdata))
     ctr = 0 #0x10c00
