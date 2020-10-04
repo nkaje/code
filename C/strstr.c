@@ -21,6 +21,10 @@ char *strstr_custom(char *haystack, const char *needle)
 {
     char *ret = NULL;
 
+    if (haystack == NULL || needle == NULL) {
+        return NULL;
+    }
+
     for(; (ret = strchr_custom(haystack, *needle)) != NULL; haystack++) {
         if (0 == strncmp(haystack, needle, strlen(needle))) {
             return haystack;
@@ -42,6 +46,11 @@ int main()
         printf("found at offset %ld, %s\n", ret - haystack, ret);
     } else {
         printf("%s not found in %s\n", needle, haystack);
+    }
+
+    ret = strstr_custom(NULL, NULL);
+    if (ret == NULL) {
+        printf("NULL check pass\n");
     }
 
     /* verify with std implementation */
