@@ -5,6 +5,18 @@ import os
 N = 7
 a = [[0] * N for i in range(N)]
 
+def enqueue(q, i):
+    q.append(i)
+
+def dequeue(q):
+    return q.pop(0)
+
+def push(s, i):
+    s.append(i)
+
+def pop(s):
+    return s.pop(len(s)-1)
+
 def print_matrix():
     for i in range(0, N):
         for j in range(0, N):
@@ -16,16 +28,16 @@ def add_edge(u, v):
     #a[v][u] = 1
 
 def BFS(i):
-    queue = []
+    q = []
     visited = []
 
-    queue.insert(0, i)
+    enqueue(q, i)
     visited.append(i)
-    while(len(queue) > 0):
-        n = queue.pop(len(queue)-1)
+    while(len(q) > 0):
+        n = dequeue(q)
         for j in range(0, N):
             if ( a[n][j] == 1) and visited.count(j) == 0:
-                queue.insert(0, j)
+                enqueue(q,j)
                 visited.append(j)
     print(visited)
 
@@ -33,13 +45,13 @@ def BFS_path(s, e):
     queue = []
     dist = [-1 for i in range(N)]
 
-    queue.insert(0, s)
+    enqueue(queue, s)
     while(len(queue) > 0):
-        n = queue.pop(len(queue)-1)
+        n = dequeue(queue)
         for j in range(0, N):
             if ( a[n][j] == 1):
                 if dist[j] == -1:
-                    queue.insert(0, j)
+                    enqueue(queue, j)
                     dist[j] = dist[n]+1
     print(dist)
     return dist[e]
@@ -48,12 +60,13 @@ def DFS_path(s, e):
     stack = []
     dist = [-1 for i in range(N)]
 
-    stack.insert(len(stack), s)
+    push(stack, s)
     while(len(stack) > 0):
-        n = stack.pop(0)
+        n = pop(stack)
         for j in range(0, N):
             if ( a[n][j] == 1):
                 if dist[j] == -1:
+                    push(stack, s)
                     stack.insert(len(stack), j)
                     dist[j] = dist[n]+1
     print(dist)
