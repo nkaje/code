@@ -6,21 +6,15 @@ class LRU:
 
     def put(self, key, value):
         if key in self.array.keys():
-            self.array[key] = value
             self.list.remove(key)
             self.list.insert(0, key)
-            return
-
-        if (len(self.array) == self.size):
+        elif (len(self.array) == self.size):
             #eviction logic
             key_to_remove = self.list[-1]
             self.list.remove(key_to_remove)
             self.array.pop(key_to_remove)
-            self.array[key] = value
-            self.list.insert(0, key)
-        else:
-            self.array[key] = value
-            self.list.insert(0, key)
+        self.array[key] = value
+        self.list.insert(0, key)
 
     def get(self, key):
         if key in self.array.keys():
