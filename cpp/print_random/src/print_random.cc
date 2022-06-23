@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <ctime>
+#include <time.h>
+#include <cstring>
+#include "logger.h"
 
 #define DEBUG 0
 
@@ -9,7 +11,9 @@ class RandomNumbers
     private:
         std::vector<int> m_v;
         int m_sz;
+        Logger m_logger;
         void swap(int i, int j);
+        void dump(void);
     public:
         RandomNumbers(int N);
         ~RandomNumbers();
@@ -19,32 +23,28 @@ class RandomNumbers
 RandomNumbers::RandomNumbers(int N)
 {
     m_sz = N;
+    m_logger = Logger(LOG_INFO);
 
-    for(int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
         m_v.push_back(i);
 
-#if DEBUG
-    for(int i = 0; i < m_sz; i++)
-        std::cout << m_v[i];
-    std::cout << std::endl;
-#endif
+    dump();
 }
 
 RandomNumbers::~RandomNumbers(void)
 {
-#if DEBUG
-    std::cout << "destroyed" << std::endl;
-#endif
+    dump();
+    m_v.clear();
 }
 
 void RandomNumbers::PrintRandom(void)
 {
     for (int l = m_sz; l > 0; l--) {
         int r = rand()%l;
-        std::cout << m_v[r] << "\t";
+        m_logger.Log(LOG_INFO, "%d\t", m_v[r]);
         swap(r, l-1);
     }
-    std::cout << std::endl;
+    m_logger.Log(LOG_INFO, "\n");
 }
 
 void RandomNumbers::swap(int i, int j)
@@ -54,9 +54,16 @@ void RandomNumbers::swap(int i, int j)
     m_v[j] = t;
 }
 
+void RandomNumbers::dump(void)
+{
+    for (int i = 0; i < m_sz; i++)
+        m_logger.Log(LOG_DEBUG, "%d\t", m_v[i]);
+    m_logger.Log(LOG_DEBUG, "\n");
+}
+
 int main()
 {
-    srand(time(0));
+    srand((unsigned int)time(NULL));
     RandomNumbers RN(10);
     RN.PrintRandom();
     return 0;
