@@ -3,27 +3,20 @@
 
 #define LIMIT   0x100
 
-struct factors {
-    int a;
-    int b;
+class Pair : public std::pair<int, int>
+{
+    public:
+        Pair(int a, int b) { first = a; second = b; };
+        Pair() { first = 0; second = 0; };
 };
 
-class Pair {
-    private:
-        int m_a;
-        int m_b;
-    public:
-        Pair(int a, int b) { m_a = a; m_b = b; }
-        Pair() { m_a = 0; m_b = 0; };
-        int get_a(void) { return m_a; }
-        int get_b(void) { return m_b; }
-        bool is_same(class Pair &P) {
-            if ((P.get_a() == this->m_a && P.get_b() == this->m_b) ||
-                (P.get_b() == this->m_a && P.get_a() == this->m_b))
-                return true;
-            return false;
-        }
-};
+bool operator==(const Pair &A, const Pair &B)
+{
+    if (((A.first == B.first) && (A.second == B.second)) ||
+         ((A.first == B.second) && (A.second == B.first)))
+        return true;
+    return false;
+}
 
 bool is_prime(const int i)
 {
@@ -34,7 +27,7 @@ bool is_prime(const int i)
     if (i == 2)
         return true;
 
-    for(int n = 2; n <= i/2; n++) {
+    for (int n = 2; n <= i/2; n++) {
         if (i%n == 0) {
             return false;
         }
@@ -44,8 +37,8 @@ bool is_prime(const int i)
 
 bool check_for_duplicate(std::vector<class Pair>&P, class Pair &p)
 {
-    for(auto &it : P) {
-        if (p.is_same(it))
+    for (auto &it : P) {
+        if (it == p)
             return true;
     }
     return false;
@@ -71,15 +64,14 @@ void print_prime_factors(int i)
     for (int n = 4; n < i; n++) {
         find_factors(PLT, n);
 
-        for (auto &it : PLT) {
-            if (is_prime(it.get_a()) && is_prime(it.get_b())) {
+       for (auto &it : PLT) {
+            if (is_prime(it.first) && is_prime(it.second)) {
                 std::cout << n << ":" << std::endl;
-                std::cout << "  " << it.get_a() << " " << it.get_b() << std::endl;
+                std::cout << " " << it.first << " " << it.second << std::endl;
             }
         }
         PLT.clear();
     }
-
 }
 
 int main()
